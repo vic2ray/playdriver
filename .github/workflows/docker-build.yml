@@ -1,12 +1,12 @@
 # 用法：把这个文件放到你仓库的 .github/workflows/docker-build.yml，
 # push 到 main 分支后自动构建并推送到 GHCR。
-name: Build and Push pw-chrome
+name: Build and Push playdriver
 
 on:
   push:
     branches: [main]
     paths:
-      - "pw-chrome-docker/**"
+      - "Dockerfile"
       - ".github/workflows/docker-build.yml"
   workflow_dispatch:  # 允许在 Actions 页面手动触发
 
@@ -31,12 +31,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # 自动生成 tag：latest（main 分支）+ 短 commit sha
+      # 镜像名固定为 playdriver：ghcr.io/<用户名>/playdriver
       - name: Docker metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ github.repository }}/pw-chrome
+          images: ghcr.io/${{ github.repository }}
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=sha,format=short
@@ -44,7 +44,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: ./pw-chrome-docker
+          context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
