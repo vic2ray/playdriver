@@ -38,4 +38,4 @@ EXPOSE 6080 5900 8000
 
 # 默认跑冒烟测试；运行时可覆盖，例如：
 # docker run ... 你的镜像 python scripts/你自己的脚本.py
-# CMD ["/usr/local/bin/start.sh", "python", "scripts/demo.py"]
+CMD ["/usr/local/bin/start.sh"]
